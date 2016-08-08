@@ -131,7 +131,7 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearchUnion(
 )
 
 STAFF = ["c1106886"]
-SUPERUSERS = ["c1106886"]
+SUPERUSERS = ["c1106886", "c1114019"]
 
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     "is_staff": ["cn={0},{1}".format(st, GROUPS_DN) for st in set(STAFF+SUPERUSERS)],
