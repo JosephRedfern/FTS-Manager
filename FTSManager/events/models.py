@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -11,11 +10,12 @@ class Location(models.Model):
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
     date = models.DateTimeField()
-    location = models.ForeignKey(Location)
-    speakers = models.ManyToManyField(User)
+    location = models.ForeignKey(Location, blank=True, null=True)
+    speakers = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
-        return "{0}: {1}".format(self.name, [speaker for speaker in self.speakers.iterator()])
+        return "{}".format(self.date)
 

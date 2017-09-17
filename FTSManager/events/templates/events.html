@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}All Events{% endblock %}
+
+{% block content %}
+
+    <h1>FTS - All Events</h1>
+
+    <h2>Upcoming</h2>
+    <table class="event-list">
+        <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+        {% for event in upcoming_events %}
+            <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} {% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
+        {% endfor %}
+    </table>
+
+    <h2>Past</h2>
+    <table class="event-list">
+    <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+    {% for event in past_events %}
+        <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} {% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}{% endfor %}</td><td>{{ event.name }}</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

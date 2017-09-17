@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Add Event{% endblock %}
+
+{% block custom_head %}
+<style>
+    #id_description, #id_speakers{
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>FTS - Add Event</h1>
+<form action="/add-event/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

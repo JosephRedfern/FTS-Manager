@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Event, Location
+from .models import Event, Location
 
 # Register your models here.
 

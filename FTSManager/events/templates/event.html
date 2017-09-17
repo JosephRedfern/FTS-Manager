@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ event.name }}</h1>
+    <p><b>Speaker(s): </b> {% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} {% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}{% endfor %}</p>
+    <p><b>Date: </b>{{ event.date }}</p>
+    <p><b>Location: </b> {{ event.location }}</p>
+    <p><b>Description: </b>{{ event.description }}</p>
+{% endblock %}

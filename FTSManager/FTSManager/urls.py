@@ -15,12 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 import events.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login',
-       {'template_name': 'admin/login.html'}),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^accounts/login/$', auth_views.login, name='login'),
+    url(r'^accounts/logout/$', auth_views.logout, name='logout'),
     url(r'^$', events.views.home),
-]
+    url(r'^events/$', events.views.events),
+    url(r'^events/(?P<event_id>[0-9]+)/$', events.views.event),
+    url(r'^add-event/', events.views.add_event),
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
