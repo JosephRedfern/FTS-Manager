@@ -32,7 +32,7 @@ SECRET_KEY = 'rvq#d8*vm+!1cx4^lj^-)6hlbksqo1o+pgr+9h*%y8$ge50+8^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['satan', 'satan.cs.cf.ac.uk', 'localhost', 'satan.cs.cardiff.ac.uk']
 
 
 # Application definition
@@ -128,8 +128,8 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearchUnion(
     LDAPSearch(GROUPS_DN, ldap.SCOPE_SUBTREE, "(objectClass=posixGroup)"),
 )
 
-STAFF = ["c1106886"]
-SUPERUSERS = ["c1106886"]
+STAFF = ["c1106886", "c1009692"]
+SUPERUSERS = ["c1106886", "c1009692"]
 
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     "is_staff": ["cn={0},{1}".format(st, GROUPS_DN) for st in set(STAFF+SUPERUSERS)],

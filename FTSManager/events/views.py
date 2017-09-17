@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .models import Event
@@ -8,7 +9,7 @@ from datetime import datetime
 
 def home(request):
     values = {}
-    next_event = Event.objects.filter(date__gt=datetime.now()).filter(name__isnull=False).order_by('date').first()
+    next_event = Event.objects.annotate(name_len=Length('name')).filter(date__gt=datetime.now(), name_len__gt=0, approved=True).order_by('date').first()
     values['next_event'] = next_event
 
     return render(request, "upcoming.html", values)
@@ -16,8 +17,8 @@ def home(request):
 
 def events(request):
     values = {}
-    upcoming_events = Event.objects.filter(date__gt=datetime.now()).filter(name__isnull=False).exclude(name__exact='').order_by('date').all()
-    past_events = Event.objects.filter(date__lt=datetime.now()).filter(name__isnull=False).exclude(name__exact='').order_by('date').all()
+    upcoming_events = Event.objects.annotate(name_len=Length('name')).filter(date__gt=datetime.now(), name_len__gt=0, approved=True).order_by('date').all()
+    past_events = Event.objects.annotate(name_len=Length('name')).filter(date__lt=datetime.now(), name_len__gt=0, approved=True).order_by('date').first()
 
     values['upcoming_events'] = upcoming_events
     values['past_events'] = past_events
@@ -26,10 +27,9 @@ def events(request):
 
 def event(request, event_id):
     values = {}
-    event = Event.objects.get(pk=event_id)
+    event = Event.objects.get(pk=event_id, approved=True)
     values['event'] = event
     return render(request, "event.html", values)
-
 
 @login_required
 def add_event(request):
@@ -41,7 +41,6 @@ def add_event(request):
         # check whether it's valid:
         if form.is_valid():
             event = form.cleaned_data['date']
-
             event.name = form.cleaned_data['title']
             event.description = form.cleaned_data['description']
             event.speakers = form.cleaned_data['speakers']
