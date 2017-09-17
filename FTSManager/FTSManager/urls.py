@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^events/$', events.views.events),
     url(r'^events/(?P<event_id>[0-9]+)/$', events.views.event),
     url(r'^add-event/', events.views.add_event),
+    url(r'^users/(?P<username>\w+)/$', events.views.user),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,23 +1,29 @@
 {% extends "base.html" %}
-{% block title %}All Events{% endblock %}
+
+{% block title %}{{ user.first_name}} {{user.last_name }}{% endblock %}
 
 {% block content %}
+    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
 
-    <h1>FTS - All Events</h1>
+    <p>{{ user.first_name }} has given {{ past_talks|length }} talk(s), and has {{ upcoming_talks|length }} upcoming talk(s).</p>
 
-    <h2>Upcoming</h2>
+    {% if upcoming_talks|length > 0 %}
+    <h2>Upcoming Talks</h2>
     <table class="event-list">
         <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
-        {% for event in upcoming_events %}
+        {% for event in upcoming_talks %}
             <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
         {% endfor %}
     </table>
+    {% endif %}
 
-    <h2>Past</h2>
+    {% if past_talks|length > 0 %}
+    <h2>Talk History</h2>
     <table class="event-list">
-    <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
-        {% for event in past_events %}
+        <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+        {% for event in past_talks %}
             <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
         {% endfor %}
-</table>
+    </table>
+    {% endif %}
 {% endblock %}

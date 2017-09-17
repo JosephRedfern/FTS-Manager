@@ -10,7 +10,7 @@ class Location(models.Model):
 
 
 class Event(models.Model):
-    name = models.TextField(blank=True)
+    name = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     date = models.DateTimeField()
     location = models.ForeignKey(Location, blank=True, null=True)
