@@ -1,6 +1,7 @@
 from django import forms
 from .models import Event
 from django.contrib.auth.models import User
+from datetime import datetime
 
 class AddEventForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -35,4 +36,4 @@ class AddEventForm(forms.Form):
     title = forms.CharField(label='Talk Title')
     date = forms.ModelChoiceField(queryset=Event.objects.filter(name=''))
     description = forms.CharField(widget=forms.Textarea, label="Talk Description")
-    speakers = forms.ModelMultipleChoiceField(queryset=User.objects.exclude(first_name='', last_name='').all())
+    speakers = forms.ModelMultipleChoiceField(queryset=User.objects.filter(date_gt=datetime.now()).exclude(first_name='', last_name='').all())
