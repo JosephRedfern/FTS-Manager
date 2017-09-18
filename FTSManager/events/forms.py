@@ -34,6 +34,6 @@ class AddEventForm(forms.Form):
             return "<{}>".format(obj.username)
 
     title = forms.CharField(label='Talk Title')
-    date = forms.ModelChoiceField(queryset=Event.objects.filter(name=''))
+    date = forms.ModelChoiceField(queryset=Event.objects.filter(date__gt=datetime.now(), name=''))
     description = forms.CharField(widget=forms.Textarea, label="Talk Description")
-    speakers = forms.ModelMultipleChoiceField(queryset=User.objects.filter(date__gt=datetime.now()).exclude(first_name='', last_name='').all())
+    speakers = forms.ModelMultipleChoiceField(queryset=User.objects.exclude(first_name='', last_name='').all())
