@@ -12,7 +12,7 @@
         <li><b>Date: </b> {{ next_event.date }}</li>
         <li><b>Speaker(s): </b> {% for s in next_event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</li>
         <li><b>Location: </b> {{ next_event.location }}</li>
-        <li><b>Description: </b> <span class="event-description">{{ next_event.description }}</span></li>
+        <li><b>Description: </b> <span class="event-description">{{ next_event.description|linebreaks}}</span></li>
     </ul>
 </div>
 
