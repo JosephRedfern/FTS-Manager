@@ -7,10 +7,10 @@
 <p>Please see below for details of the next FTS event. For a list of all (past and future) events, please <a href="/events">click here</a>.</p>
 
 <div class="event">
-    <h2>{{ next_event.name }}</h2>
+    <h2><a href="/events/{{ next_event.id }}">{{ next_event.name }}</a></h2>
     <ul>
         <li><b>Date: </b> {{ next_event.date }}</li>
-        <li><b>Speaker(s): </b> {% for s in next_event.speakers.all %}{% if not forloop.first %}, {% endif %} {% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}{% endfor %}</li>
+        <li><b>Speaker(s): </b> {% for s in next_event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</li>
         <li><b>Location: </b> {{ next_event.location }}</li>
         <li><b>Description: </b> <span class="event-description">{{ next_event.description }}</span></li>
     </ul>
