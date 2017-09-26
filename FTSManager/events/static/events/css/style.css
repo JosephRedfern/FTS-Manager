@@ -23,3 +23,11 @@
 .event-list table, th, td {
     border: 1px solid;
 }
+
+.tm{
+    margin-top: 20px;
+}
+
+.content{
+    margin-top: 20px;
+}

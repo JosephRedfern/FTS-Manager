@@ -1,10 +1,13 @@
+from django.views.generic.edit import UpdateView
 from django.shortcuts import render
 from django.db.models.functions import Length
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Event
 from .forms import AddEventForm
+from dal import autocomplete
 from datetime import datetime
 
 
@@ -80,3 +83,27 @@ def add_event(request):
     values['form'] = form
 
     return render(request, 'add_event.html', values)
+
+class EventUpdate(UpdateView):
+    model = Event
+    fields = ['name', 'description']
+    template_name_suffix = '_update_form'
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_result_label(self, obj):
+        if len(obj.first_name) > 0 and len(obj.last_name) > 0:
+            return "{} {}".format(obj.first_name, obj.last_name)
+        else:
+            return "<{}>".format(obj.username)
+
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated():
+            return User.objects.none()
+
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(Q(first_name__istartswith=self.q) | Q(last_name__istartswith=self.q) | Q(username__istartswith=self.q))
+
+        return qs

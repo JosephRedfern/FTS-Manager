@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^events/(?P<event_id>[0-9]+)/$', events.views.event),
     url(r'^add-event/', events.views.add_event),
     url(r'^users/(?P<username>\w+)/$', events.views.user),
+    url(r'^user-autocomplete/$', events.views.UserAutocomplete.as_view(), name='user-autocomplete')
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

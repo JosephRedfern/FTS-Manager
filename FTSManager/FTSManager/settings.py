@@ -32,7 +32,7 @@ SECRET_KEY = 'rvq#d8*vm+!1cx4^lj^-)6hlbksqo1o+pgr+9h*%y8$ge50+8^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['satan', 'satan.cs.cf.ac.uk', 'localhost', '127.0.0.1' 'satan.cs.cardiff.ac.uk']
+ALLOWED_HOSTS = ['satan', 'satan.cs.cf.ac.uk', 'localhost', '127.0.0.1' 'satan.cs.cardiff.ac.uk', '192.168.0.57']
 
 
 # Application definition
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dal',
+    'dal_select2',
     'events',
 ]
 

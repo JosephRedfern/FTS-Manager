@@ -2,6 +2,7 @@ from django import forms
 from .models import Event
 from django.contrib.auth.models import User
 from datetime import datetime
+from dal import autocomplete
 
 class AddEventForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -36,4 +37,4 @@ class AddEventForm(forms.Form):
     title = forms.CharField(label='Talk Title')
     date = forms.ModelChoiceField(queryset=Event.objects.filter(date__gt=datetime.now(), name=''))
     description = forms.CharField(widget=forms.Textarea, label="Talk Description")
-    speakers = forms.ModelMultipleChoiceField(queryset=User.objects.exclude(first_name='', last_name='').all())
+    speakers = forms.ModelMultipleChoiceField(queryset=User.objects.exclude(first_name='', last_name='').all(), widget=autocomplete.ModelSelect2Multiple(url='user-autocomplete'))

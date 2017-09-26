@@ -12,6 +12,7 @@
 
 {% block content %}
     <h1>FTS - Add Event</h1>
+    {{ form.media }}
 <form action="/add-event/" method="post">
     {% csrf_token %}
     {{ form.as_p }}
