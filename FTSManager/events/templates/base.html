@@ -33,7 +33,7 @@
         <a class="nav-link" href="/add-event">Add Event</a>
       </li>
     </ul>
-    <span class="navbar-text">{% if user.is_authenticated %}Logged in as {{user.get_short_name }}{% else %}Not logged in{%endif%}</span>
+    <span class="navbar-text">{% if user.is_authenticated %}Logged in as {{user.get_short_name }}{% else %}<a href="/accounts/login">Not logged in</a>{%endif%}</span>
   </div>
 </nav>
 <div class="content">
