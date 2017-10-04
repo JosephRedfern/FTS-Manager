@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 
 class Location(models.Model):
@@ -16,6 +17,7 @@ class Event(models.Model):
     location = models.ForeignKey(Location, blank=True, null=True)
     speakers = models.ManyToManyField(User, blank=True)
     approved = models.BooleanField(default=False)
+    duration = models.DurationField(default=datetime.timedelta(minutes=50))
 
     def __str__(self):
         if self.name is None or len(self.name) == 0:

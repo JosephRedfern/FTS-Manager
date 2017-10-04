@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Add Event{% endblock %}
+{% block title %}Edit Event{% endblock %}
 
 {% block custom_head %}
 <style>
@@ -11,9 +11,9 @@
 {% endblock %}
 
 {% block content %}
-<h2>Add Event</h2>
+    <h1>FTS - Add Event</h1>
     {{ form.media }}
-<form action="/add-event/" method="post">
+<form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />

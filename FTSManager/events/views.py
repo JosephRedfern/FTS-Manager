@@ -1,14 +1,16 @@
-from django.views.generic.edit import UpdateView
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.db.models.functions import Length
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.urls import reverse
 from .models import Event
-from .forms import AddEventForm
+from .forms import AddEventForm, EditEventForm
 from dal import autocomplete
 from datetime import datetime
+from django_ical.views import ICalFeed
 
 
 def home(request):
@@ -17,6 +19,20 @@ def home(request):
     values['next_event'] = next_event
 
     return render(request, "upcoming.html", values)
+
+
+def me(request):
+    if request.user is not None and request.user.username is not None and len(request.user.username.strip()) > 0:
+        print(dir(request.user))
+        return HttpResponseRedirect(reverse('user', kwargs={'username': request.user.username}))
+    else:
+        return HttpResponseRedirect(reverse('home'))
+
+
+def about(request):
+    values = {}
+
+    return render(request, "about.html", values)
 
 
 def user(request, username):
@@ -65,10 +81,6 @@ def add_event(request):
 
             event.save()
 
-            print("Title: ", form.cleaned_data['title'])
-            print("Date: ", form.cleaned_data['date'])
-            print("Description: ", form.cleaned_data['description'])
-
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
@@ -84,10 +96,51 @@ def add_event(request):
 
     return render(request, 'add_event.html', values)
 
-class EventUpdate(UpdateView):
-    model = Event
-    fields = ['name', 'description']
-    template_name_suffix = '_update_form'
+
+def edit_event(request, event_id):
+    instance = get_object_or_404(Event, id=event_id)
+
+    if not (request.user.is_staff or request.user in instance.speakers.all()):
+        raise PermissionDenied("You do not have permission to edit events in which you are not a speaker.")
+
+    form = EditEventForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('event', kwargs={'event_id': event_id}))
+
+    return render(request, "edit_event.html", {'form': form})
+
+
+class EventFeed(ICalFeed):
+    title = "FTS Calendar"
+    product_id = '-//example.com//Example//EN'
+    timezone = 'UTC'
+    file_name = "event.ics"
+
+    def items(self):
+        return Event.objects.filter(approved=True).exclude(name='').all()
+
+    def item_title(self, item):
+        return "{} - ({})".format(item.name, ','.join(["{} {}".format(x.first_name, x.last_name) for x in item.speakers.all()]))
+
+    def item_description(self, item):
+        return item.description
+
+    def item_location(self, item):
+        return item.location
+
+    def item_link(self, item):
+        return "/events/{}".format(item.id)
+
+    def item_organiser(self, item):
+        return ", ".join([str(x) for x in item.speakers])
+
+    def item_start_datetime(self, item):
+        return item.date
+
+    def item_end_datetime(self, item):
+        return item.date + item.duration
+
 
 class UserAutocomplete(autocomplete.Select2QuerySetView):
     def get_result_label(self, obj):

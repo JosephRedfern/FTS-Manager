@@ -2,22 +2,30 @@
 {% block title %}All Events{% endblock %}
 
 {% block content %}
-
-    <h1>FTS - All Events</h1>
-
-    <h2>Upcoming</h2>
-    <table class="event-list">
+<p>Please see below for a list of past and upcoming FTS events. You may also wish to subscripe to the FTS iCalendar Feed, available <a href="{% url "calendar-feed" %}">here</a>.
+    <h3>Upcoming Events</h3>
+    <table class="table table-sm">
+    <thead>
         <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+    </thead>
+    <tbody>
         {% for event in upcoming_events %}
             <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
         {% endfor %}
+    </tbody>
     </table>
 
-    <h2>Past</h2>
-    <table class="event-list">
+    {% if past_events|length > 0 %}
+    <h3>Past</h3>
+    <table class="table table-sm">
+    <thead>
     <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+    </thead>
+    <tbody>
         {% for event in past_events %}
             <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
         {% endfor %}
+    </tbody>
 </table>
+{% endif %}
 {% endblock %}

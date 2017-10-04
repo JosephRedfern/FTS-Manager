@@ -22,12 +22,17 @@ import events.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/login/$', auth_views.login, name='login'),
-    url(r'^accounts/logout/$', auth_views.logout, name='logout'),
-    url(r'^$', events.views.home),
-    url(r'^events/$', events.views.events),
-    url(r'^events/(?P<event_id>[0-9]+)/$', events.views.event),
-    url(r'^add-event/', events.views.add_event),
-    url(r'^users/(?P<username>\w+)/$', events.views.user),
-    url(r'^user-autocomplete/$', events.views.UserAutocomplete.as_view(), name='user-autocomplete')
+    url(r'^accounts/login/$', auth_views.LoginView.as_view(), name='login'),
+    url(r'^accounts/logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    url(r'^accounts/profile/$', events.views.me, name='profile'),
+    url(r'^$', events.views.home, name='home'),
+    url(r'^about/', events.views.about, name='about'),
+    url(r'^events/$', events.views.events, name='events'),
+    url(r'^events/(?P<event_id>[0-9]+)/$', events.views.event, name='event'),
+    url(r'^events/(?P<event_id>[0-9]+)/edit/$', events.views.edit_event, name='edit-event'),
+    url(r'^add-event/', events.views.add_event, name='add-event'),
+    url(r'^me/', events.views.me, name='my-profile'),
+    url(r'^users/(?P<username>\w+)/$', events.views.user, name='user'),
+    url(r'^user-autocomplete/$', events.views.UserAutocomplete.as_view(), name='user-autocomplete'),
+    url(r'^events.ics$', events.views.EventFeed(), name="calendar-feed"),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

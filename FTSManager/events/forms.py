@@ -4,7 +4,23 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from dal import autocomplete
 
+
+class EditEventForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(EditEventForm, self).__init__(*args, **kwargs)
+        self.fields['speakers'].label_from_instance = AddEventForm.label_from_instance
+
+    class Meta:
+        model = Event
+        fields = ['name', 'description', 'speakers']
+        widgets = {'speakers': autocomplete.ModelSelect2Multiple(url='user-autocomplete')}
+
+
 class AddEventForm(forms.Form):
+    """
+    We can probably use forms.ModelForm as a base class for this form.
+    """
     def __init__(self, *args, **kwargs):
         """
         We override __init__ so that we can pass in the current user so that the form gets pre-populated with whoever

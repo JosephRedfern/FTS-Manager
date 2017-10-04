@@ -1,7 +1,3 @@
-.event{
-    margin-left: 50px;
-}
-
 .event li, ul{
     list-style-type: none;
     margin-left: 0;
@@ -9,19 +5,11 @@
 }
 
 .event-description{
-    font-style: italic;
+    margin-left: 20px;
 }
 
 .footer{
     margin-top: 50px;
-}
-
-.event-list table {
-    border-collapse: collapse;
-}
-
-.event-list table, th, td {
-    border: 1px solid;
 }
 
 .tm{

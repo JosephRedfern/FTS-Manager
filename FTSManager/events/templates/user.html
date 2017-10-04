@@ -9,21 +9,29 @@
 
     {% if upcoming_talks|length > 0 %}
     <h2>Upcoming Talks</h2>
-    <table class="event-list">
+    <table class="table table-sm">
+	    <thead>
         <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+	    </thead>
+	    <tbody>
         {% for event in upcoming_talks %}
             <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
         {% endfor %}
+	    </tbody>
     </table>
     {% endif %}
 
     {% if past_talks|length > 0 %}
     <h2>Talk History</h2>
-    <table class="event-list">
+    <table class="table table-sm">
+	    <thead>
         <tr><th>Date</th><th>Speaker(s)</th><th>Title</th></tr>
+	    </thead>
+	    <tbody>
         {% for event in past_talks %}
             <tr><td>{{ event.date }}</td><td>{% for s in event.speakers.all %}{% if not forloop.first %}, {% endif %} <a href="/users/{{ s.username }}">{% if s.first_name %}{{ s.first_name }} {{ s.last_name }}{% else %}{{ s.username }}{% endif %}</a>{% endfor %}</td><td><a href="/events/{{ event.id }}">{{ event.name }}</a></td></tr>
         {% endfor %}
+	    </tbody>
     </table>
     {% endif %}
 {% endblock %}
