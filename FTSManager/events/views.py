@@ -11,6 +11,7 @@ from .forms import AddEventForm, EditEventForm
 from dal import autocomplete
 from datetime import datetime
 from django_ical.views import ICalFeed
+from django.contrib import messages
 
 
 def home(request):
@@ -23,7 +24,6 @@ def home(request):
 
 def me(request):
     if request.user is not None and request.user.username is not None and len(request.user.username.strip()) > 0:
-        print(dir(request.user))
         return HttpResponseRedirect(reverse('user', kwargs={'username': request.user.username}))
     else:
         return HttpResponseRedirect(reverse('home'))
@@ -84,11 +84,11 @@ def add_event(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
+            messages.success(request, "Thank you - your event has been received, and is pending approval.")
             return HttpResponseRedirect('/events/')
         else:
-            print("nope")
+            messages.error(request, "There was an error in your form.")
 
-            # if a GET (or any other method) we'll create a blank form
     else:
         form = AddEventForm(current_user=request.user)
 
