@@ -9,14 +9,15 @@ from django.urls import reverse
 from .models import Event
 from .forms import AddEventForm, EditEventForm
 from dal import autocomplete
-from datetime import datetime
 from django_ical.views import ICalFeed
 from django.contrib import messages
+from django.utils import timezone
+from django.core.mail import send_mail
 
 
 def home(request):
     values = {}
-    next_event = Event.objects.annotate(name_len=Length('name')).filter(date__gt=datetime.now(), name_len__gt=0, approved=True).order_by('date').first()
+    next_event = Event.objects.annotate(name_len=Length('name')).filter(date__gt=timezone.now(), name_len__gt=0, approved=True).order_by('date').first()
     values['next_event'] = next_event
 
     return render(request, "upcoming.html", values)
@@ -38,8 +39,8 @@ def about(request):
 def user(request, username):
     values = {}
     user = User.objects.filter(username=username).first()
-    upcoming_talks = Event.objects.filter(speakers__username=username, date__gt=datetime.now(), approved=True).exclude(name='').all()
-    past_talks = Event.objects.filter(speakers__username=username, date__lt=datetime.now(), approved=True).exclude(name='').all()
+    upcoming_talks = Event.objects.filter(speakers__username=username, date__gt=timezone.now(), approved=True).exclude(name='').all()
+    past_talks = Event.objects.filter(speakers__username=username, date__lt=timezone.now(), approved=True).exclude(name='').all()
     values['upcoming_talks'] = upcoming_talks
     values['past_talks'] = past_talks
     values['user'] = user
@@ -49,8 +50,8 @@ def user(request, username):
 
 def events(request):
     values = {}
-    upcoming_events = Event.objects.annotate(name_len=Length('name')).filter(date__gt=datetime.now(), name_len__gt=0, approved=True).order_by('date').all()
-    past_events = Event.objects.annotate(name_len=Length('name')).filter(date__lt=datetime.now(), name_len__gt=0, approved=True).order_by('date').all()
+    upcoming_events = Event.objects.annotate(name_len=Length('name')).filter(date__gt=timezone.now(), name_len__gt=0, approved=True).order_by('date').all()
+    past_events = Event.objects.annotate(name_len=Length('name')).filter(date__lt=timezone.now(), name_len__gt=0, approved=True).order_by('date').all()
 
     values['upcoming_events'] = upcoming_events
     values['past_events'] = past_events
@@ -78,13 +79,14 @@ def add_event(request):
             event.name = form.cleaned_data['title']
             event.description = form.cleaned_data['description']
             event.speakers = form.cleaned_data['speakers']
-
             event.save()
+            send_mail("New FTS talk submitted",
+                      "A new FTS talk (title: \"{}\") has been submitted, please check and approve at https://fts.cs.cf.ac.uk/admin/events/{}/change/.".format(event.name, event.id),
+                      "FTS Manager <fts-list-owner@cs.cf.ac.uk>",
+                      ["fts-list-owner@cs.cf.ac.uk"])
 
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
             messages.success(request, "Thank you - your event has been received, and is pending approval.")
+
             return HttpResponseRedirect('/events/')
         else:
             messages.error(request, "There was an error in your form.")
@@ -106,6 +108,7 @@ def edit_event(request, event_id):
     form = EditEventForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
+
         return HttpResponseRedirect(reverse('event', kwargs={'event_id': event_id}))
 
     return render(request, "edit_event.html", {'form': form})
