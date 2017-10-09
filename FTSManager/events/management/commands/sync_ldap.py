@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from django.conf import settings
+import kronos
 import ldap
 
+@kronos.register("0 0 * * *")
 class Command(BaseCommand):
     help = 'Syncs LDAP users with Django DB'
 

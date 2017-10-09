@@ -13,9 +13,9 @@ that need to be installed prior to install -- libsasl2, libldap2, and libssl
 installed through your distributions package manager, for example using `sudo apt
 install libsasl2-dev libldap2-dev libssl-dev`.
 
-Please examine `FTSManager/FTSManager/settings.py`, ensuring that database 
-settings are correct, that email settings are correct, and that STATIC_ROOT is 
-set to a location that your web server is serving as /static/. Additionally, the
+Please examine `FTSManager/FTSManager/settings.py`, ensuring that a fresh secret
+key is set, that email settings are correct, that `STATIC_ROOT` is  set to a
+location that your web server is serving as /static/. Additionally, the
 hostname of the server needs to be added to the `ALLOWED_HOSTS` list.
 
 Once dependencies are installed, and settings have been correctly defined
@@ -47,7 +47,9 @@ who have not yet logged in.
 The final step is to configure cron to execute FTS-Manager periodic tasks.
 This can be done by running the command `python manage.py installtasks`.
 This will install a nightly cron to sync ldap users, and a minutely cron to send
-reminder emails (where necessary).
+reminder emails (where necessary). Check that crontab has been configured
+properly by running `crontab -l` -- you should see two new entries ending in
+`#kronos :<string_of_hex>`
 
 
 ## Tools
@@ -56,4 +58,3 @@ the management commmand `python mange.py add_user <username>` can be used.
 Note that any user in the LDAP server is able to log in to FTS-Manager, and
 `add_user` is only needed for adding talks on behalf of users that have never
 signed in.
-

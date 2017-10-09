@@ -160,3 +160,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+if not DEBUG:
+    STATIC_ROOT = "/path/to/a/directory/nginx/can/serve" # Change this to a directory that is being served as /static/ by your web server
