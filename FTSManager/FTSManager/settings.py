@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'rvq#d8*vm+!1cx4^lj^-)6hlbksqo1o+pgr+9h*%y8$ge50+8^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("FTS_DEBUG", False)
 
 ALLOWED_HOSTS = ['satan.cs.cf.ac.uk', 'localhost', 'fts.cs.cf.ac.uk', 'fts']
 
@@ -85,12 +85,25 @@ WSGI_APPLICATION = 'FTSManager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': 'cspg.cs.cf.ac.uk',
+            'PORT': '5432',
+        }
+    }
+
 
 
 # Password validation
@@ -162,4 +175,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 if not DEBUG:
-    STATIC_ROOT = "/path/to/a/directory/nginx/can/serve" # Change this to a directory that is being served as /static/ by your web server
+    STATIC_ROOT = "/usr/src/app/FTSManager/static" # Change this to a directory that is being served as /static/ by your web server
