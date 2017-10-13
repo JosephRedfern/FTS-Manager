@@ -3,10 +3,9 @@ FROM python:3.6.3-jessie
 WORKDIR /usr/src/app
 
 RUN apt-get update
-RUN apt-get install -y libsasl2-dev libldap2-dev libssl-dev nginx supervisor
+RUN apt-get install -y libsasl2-dev libldap2-dev libssl-dev nginx supervisor cron
 
 COPY requirements.txt ./
-COPY docker/start.sh /start.sh
 COPY docker/fts-manager.conf /etc/nginx/sites-available/default
 COPY docker/supervisor.conf /etc/supervisor/conf.d/
 COPY docker/uwsgi.ini ./
@@ -18,10 +17,9 @@ RUN ln -s /etc/nginx/sites-available/fts-manager.conf /etc/nginx/sites-enabled/f
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN ls FTSManager/
 RUN python FTSManager/manage.py collectstatic
+RUN python FTSManager/manage.py installtasks
 
 EXPOSE 80
 
-CMD [ "supervisord", "-n"]
-#CMD ["/usr/local/bin/uwsgi", "--ini", "/usr/src/app/uwsgi.ini"]
+CMD [ "supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
