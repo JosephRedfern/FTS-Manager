@@ -81,7 +81,7 @@ def add_event(request):
             event.speakers = form.cleaned_data['speakers']
             event.save()
             send_mail("New FTS talk submitted",
-                      "A new FTS talk (title: \"{}\") has been submitted, please check and approve at https://fts.cs.cf.ac.uk/admin/events/{}/change/.".format(event.name, event.id),
+                      "A new FTS talk (title: \"{}\") has been submitted, please check and approve at https://fts.cs.cf.ac.uk/admin/events/event/{}/change/.".format(event.name, event.id),
                       "FTS Manager <fts-list-owner@cs.cf.ac.uk>",
                       ["fts-list-owner@cs.cf.ac.uk"])
 
