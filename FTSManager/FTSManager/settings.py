@@ -174,5 +174,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+EMAIL_HOST = os.getenv("SMTP_SERVER", "portico.cs.cf.ac.uk")
+EMAIL_PORT = os.getenv("SMTP_PORT", 465)
+EMAIL_USE_SSL = os.getenv("SMTP_SSL", "True").lower() in ('1', "true")
+
 if not DEBUG:
     STATIC_ROOT = "/usr/src/app/FTSManager/static" # Change this to a directory that is being served as /static/ by your web server
