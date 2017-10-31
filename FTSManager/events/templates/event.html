@@ -8,7 +8,7 @@
     <p><b>Date: </b>{{ event.date }}</p>
     <p><b>Location: </b> {{ event.location }}</p>
     <p><b>Description: </b>{{ event.description|linebreaks }}</p>
-    {%if user.is_staff or user in event.speakers %}
+    {%if user.is_staff or user in event.speakers.all %}
     <p><a class="btn btn-outline-warning btn-sm" href="edit/" role="button">Edit</a></p>
     {% endif %}
    
