@@ -51,7 +51,7 @@ def user(request, username):
 def events(request):
     values = {}
     upcoming_events = Event.objects.annotate(name_len=Length('name')).filter(date__gt=timezone.now(), name_len__gt=0, approved=True).order_by('date').all()
-    past_events = Event.objects.annotate(name_len=Length('name')).filter(date__lt=timezone.now(), name_len__gt=0, approved=True).order_by('date').all()
+    past_events = Event.objects.annotate(name_len=Length('name')).filter(date__lt=timezone.now(), name_len__gt=0, approved=True).order_by('-date').all()
 
     values['upcoming_events'] = upcoming_events
     values['past_events'] = past_events
