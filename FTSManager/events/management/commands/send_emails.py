@@ -31,6 +31,8 @@ class Command(BaseCommand):
                         else:
                             emails = ["fts-list@cs.cf.ac.uk"]
 
+                        emails.append("redfernjm@cs.cf.ac.uk")
+
                         # We only want to send abstract reminders if the current abstract is empty.
                         # I'm define "empty" as <= 3 words (since a common placeholder is "to do" or "TBA")
                         if notification.abstract_reminder and len(event.description.strip().split(" ")) > 3:
