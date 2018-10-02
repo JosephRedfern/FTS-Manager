@@ -23,7 +23,7 @@ class Command(BaseCommand):
                 first_name = r['givenName'][0].decode('utf-8')
                 last_name = r['sn'][0].decode('utf-8')
                 email = r['mail'][0].decode('utf-8')
-                user, created = User.objects.get_or_create(username=username, email=email, first_name=first_name, last_name=last_name)
+                user, created = User.objects.update_or_create(username=username, defaults={'email': email, 'first_name': first_name, 'last_name': last_name})
                 total += 1
                 if created:
                     user.set_unusable_password()
