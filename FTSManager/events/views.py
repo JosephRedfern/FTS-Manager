@@ -43,7 +43,7 @@ def user(request, username):
     past_talks = Event.objects.filter(speakers__username=username, date__lt=timezone.now(), approved=True).exclude(name='').all()
     values['upcoming_talks'] = upcoming_talks
     values['past_talks'] = past_talks
-    values['user'] = user
+    values['speaker'] = user
 
     return render(request, "user.html", values)
 
