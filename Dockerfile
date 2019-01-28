@@ -1,4 +1,4 @@
-FROM python:3.6.3-jessie
+FROM python:3.7.2-stretch
 
 WORKDIR /usr/src/app
 
@@ -17,8 +17,9 @@ RUN ln -s /etc/nginx/sites-available/fts-manager.conf /etc/nginx/sites-enabled/f
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN python FTSManager/manage.py collectstatic
-RUN python FTSManager/manage.py installtasks
+WORKDIR /usr/src/app/FTSManager
+RUN python manage.py collectstatic
+RUN python manage.py installtasks
 
 EXPOSE 80
 
