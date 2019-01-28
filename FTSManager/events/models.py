@@ -14,7 +14,7 @@ class Event(models.Model):
     name = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     date = models.DateTimeField()
-    location = models.ForeignKey(Location, blank=True, null=True)
+    location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.PROTECT)
     speakers = models.ManyToManyField(User, blank=True)
     approved = models.BooleanField(default=False)
     duration = models.DurationField(default=datetime.timedelta(minutes=50))
@@ -42,8 +42,8 @@ class Notification(models.Model):
 
 class SentNotification(models.Model):
     date = models.DateTimeField(auto_now_add=True)
-    notification = models.ForeignKey(Notification)
-    event = models.ForeignKey(Event)
+    notification = models.ForeignKey(Notification, on_delete=models.PROTECT)
+    event = models.ForeignKey(Event, models.PROTECT)
 
     def __str__(self):
         return "{} for {}".format(self.notification, self.event)

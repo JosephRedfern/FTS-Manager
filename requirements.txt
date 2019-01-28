@@ -1,13 +1,10 @@
-Django==1.11.5
+Django==2.1.2
 django-auth-ldap==1.2.15
 django-autocomplete-light==3.2.10
 django-ical==1.4
 django-kronos==1.0
+django-simple-menu==1.2.1
 icalendar==3.11.7
 psycopg2==2.7.3.1
 pyldap==2.4.37
-python-crontab==2.2.4
-python-dateutil==2.6.1
-pytz==2017.2
-six==1.11.0
-uWSGI==2.0.15
+pytz==2018.4
