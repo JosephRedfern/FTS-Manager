@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.template import defaultfilters
 from django.conf import settings
 from events.models import Event, SentNotification, Notification
 from django.utils import timezone
@@ -21,10 +22,13 @@ class Command(BaseCommand):
         for event in future_events:
             # look at every potential notification
             for notification in notifications:
-                # check if it's time to send the notification yet
-                if event.date - notification.notice <= timezone.now():
+                print(f"Notification <{notification}> found for <{event}>")
+                # check if it's time to send the notification yet, and that the event hasn't already occuret, and that the event hasn't already occured
+                if event.date - notification.notice <= timezone.now() and event.date > timezone.now():
                     # make sure we've not sent it already
                     if SentNotification.objects.filter(event=event, notification=notification).count() == 0:
+                        print(f"In date and never sent before -- sending!")
+
                         # if we're only sending to speakers, use their email addresses, otherwise send to fts-list.
                         if notification.speakers_only or notification.abstract_reminder:
                             emails = [e.email for e in event.speakers.all()]
@@ -45,7 +49,7 @@ class Command(BaseCommand):
                         speakers_formatted = ", ".join(["{} {}".format(s.first_name, s.last_name) if len(s.first_name) > 0 else s.username for s in event.speakers.all()])
 
                         # template context that will be used to populate the template
-                        ctx = Context({'event': event, 'speakers': speakers_formatted, 'time': event.date.strftime("%H:%M")})
+                        ctx = Context({'event': event, 'speakers': speakers_formatted, 'time': defaultfilters.date(event.date, 'g:i')}, autoescape=False)
 
                         # actually render the templates to get out the text that we're going to include in our email.
                         rendered_subject = subject_template.render(ctx)
