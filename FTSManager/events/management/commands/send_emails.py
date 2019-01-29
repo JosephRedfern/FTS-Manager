@@ -10,7 +10,7 @@ import kronos
 import time
 
 
-@kronos.register('* * * * *')
+@kronos.register('*/5 * * * *')
 class Command(BaseCommand):
     help = 'Send scheduled emails'
 
