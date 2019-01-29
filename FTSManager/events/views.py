@@ -78,8 +78,7 @@ def add_event(request):
             event = form.cleaned_data['date']
             event.name = form.cleaned_data['title']
             event.description = form.cleaned_data['description']
-            event.speakers = form.cleaned_data['speakers']
-            event.save()
+            event.speakers.set(form.cleaned_data['speakers'])
             send_mail("New FTS talk submitted",
                       "A new FTS talk (title: \"{}\") has been submitted, please check and approve at https://fts.cs.cf.ac.uk/admin/events/event/{}/change/.".format(event.name, event.id),
                       "FTS Manager <fts-list-owner@cs.cf.ac.uk>",
@@ -154,7 +153,7 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return User.objects.none()
 
         qs = User.objects.all()
