@@ -1,6 +1,6 @@
 Django==2.1.2
 django-auth-ldap==1.2.15
-django-autocomplete-light==3.2.10
+django-autocomplete-light==3.3.2
 django-ical==1.4
 django-kronos==1.0
 django-simple-menu==1.2.1
